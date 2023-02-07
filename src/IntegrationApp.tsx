@@ -8,6 +8,7 @@ export const IntegrationApp: FC = () => {
   const [watchedElementValue, setWatchedElementValue] = useState<string | null>(null);
   const [selectedItemNames, setSelectedItemNames] = useState<ReadonlyArray<string>>([]);
   const [selectedItemTypes, setSelectedItemTypes]  = useState<ReadonlyArray<string>>([]);
+  const [selectedItemTypeElements, setSelectedItemTypeElements]  = useState<ReadonlyArray<string>>([]);
   const [elementValue, setElementValue] = useState<string | null>(null);
 
   const updateWatchedElementValue = useCallback((codename: string) => {
@@ -64,8 +65,8 @@ export const IntegrationApp: FC = () => {
   
       const type = types.data.items.filter(type => type.system.id === selectedItemTypes[0])
       if(type[0]?.system.codename){
-        const typeCodename = type[0]?.system.codename
-        setSelectedItemTypes([typeCodename])
+        const typeElements = `${type[0]?.system.codename} : ${type[0].elements.keys()}`
+        setSelectedItemTypeElements([typeElements])
       }
     }
   })();
@@ -83,7 +84,8 @@ export const IntegrationApp: FC = () => {
         This is the watched element: {watchedElementValue}
       </section>
       <section>
-        These are your selected item names and types: {selectedItemNames.join(', ')} - {selectedItemTypes.join(', ')}
+        These are your selected item names and types: {selectedItemNames.join(', ')} 
+        - {selectedItemTypes.join(', ')} - {selectedItemTypeElements}
         <button onClick={selectItems}>Select different items</button>
       </section>
     </>
