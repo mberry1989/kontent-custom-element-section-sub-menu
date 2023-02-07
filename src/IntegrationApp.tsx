@@ -65,7 +65,7 @@ export const IntegrationApp: FC = () => {
   
       const type = types.data.items.filter(type => type.system.id === selectedItemTypes[0])
       if(type[0]?.system.codename){
-        const typeElements = `${type[0]?.system.codename} : ${type[0].elements.keys()}`
+        const typeElements = `${type[0]?.system.codename} : ${Object.keys(type[0].elements)}`
         setSelectedItemTypeElements([typeElements])
       }
     }
