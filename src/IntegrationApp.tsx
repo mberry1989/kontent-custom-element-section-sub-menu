@@ -87,7 +87,7 @@ export const IntegrationApp: FC = () => {
         These are your selected item names: {selectedItemNames.join(', ')} 
 
         and here are the types:
-        - {selectedItemTypes.join(', ')} - {selectedItemTypeElements}
+        - {selectedItemTypes.join(', ')} - {selectedItemTypeElements.join(', ')}
         <button onClick={selectItems}>Select different items</button>
       </section>
     </>
