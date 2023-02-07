@@ -4,7 +4,6 @@ import { createDeliveryClient } from '@kontent-ai/delivery-sdk';
 export const IntegrationApp: FC = () => {
   const [config, setConfig] = useState<Config | null>(null);
   const [projectId, setProjectId] = useState<string | null>(null);
-  const [isDisabled, setIsDisabled] = useState(false);
   const [itemName, setItemName] = useState<string | null>(null);
   const [watchedElementValue, setWatchedElementValue] = useState<string | null>(null);
   const [selectedItemNames, setSelectedItemNames] = useState<ReadonlyArray<string>>([]);
@@ -23,7 +22,6 @@ export const IntegrationApp: FC = () => {
 
       setConfig(element.config);
       setProjectId(context.projectId);
-      setIsDisabled(element.disabled);
       setItemName(context.item.name);
       setElementValue(element.value ?? '');
       updateWatchedElementValue(element.config.textElementCodename);
@@ -32,10 +30,6 @@ export const IntegrationApp: FC = () => {
 
   useEffect(() => {
     CustomElement.setHeight(500);
-  }, []);
-
-  useEffect(() => {
-    CustomElement.onDisabledChanged(setIsDisabled);
   }, []);
 
   useEffect(() => {
@@ -58,11 +52,6 @@ export const IntegrationApp: FC = () => {
           setSelectedItemTypes(items?.map(item => item.type.id) ?? [])
         }
         );
-
-  const updateValue = (newValue: string) => {
-    CustomElement.setValue(newValue);
-    setElementValue(newValue);
-  };
 
   (async function getType(){
     if(projectId){
