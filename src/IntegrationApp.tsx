@@ -1,4 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react';
+import { createDeliveryClient } from '@kontent-ai/delivery-sdk';
 
 export const IntegrationApp: FC = () => {
   const [config, setConfig] = useState<Config | null>(null);
@@ -6,8 +7,8 @@ export const IntegrationApp: FC = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [itemName, setItemName] = useState<string | null>(null);
   const [watchedElementValue, setWatchedElementValue] = useState<string | null>(null);
-  const [selectedAssetNames, setSelectedAssetNames] = useState<ReadonlyArray<string>>([]);
   const [selectedItemNames, setSelectedItemNames] = useState<ReadonlyArray<string>>([]);
+  const [selectedItemTypes, setSelectedItemTypes]  = useState<ReadonlyArray<string>>([]);
   const [elementValue, setElementValue] = useState<string | null>(null);
 
   const updateWatchedElementValue = useCallback((codename: string) => {
@@ -48,20 +49,37 @@ export const IntegrationApp: FC = () => {
     CustomElement.observeElementChanges([config.textElementCodename], () => updateWatchedElementValue(config.textElementCodename));
   }, [config, updateWatchedElementValue]);
 
-  const selectAssets = () =>
-    CustomElement.selectAssets({ allowMultiple: true, fileType: 'all' })
-      .then(ids => CustomElement.getAssetDetails(ids?.map(i => i.id) ?? []))
-      .then(assets => setSelectedAssetNames(assets?.map(asset => asset.name) ?? []));
-
   const selectItems = () =>
     CustomElement.selectItems({ allowMultiple: true })
       .then(ids => CustomElement.getItemDetails(ids?.map(i => i.id) ?? []))
-      .then(items => setSelectedItemNames(items?.map(item => item.name) ?? []));
+      .then(items => 
+        {
+          setSelectedItemNames(items?.map(item => item.name) ?? [])
+          setSelectedItemTypes(items?.map(item => item.type.id) ?? [])
+        }
+        );
 
   const updateValue = (newValue: string) => {
     CustomElement.setValue(newValue);
     setElementValue(newValue);
   };
+
+  (async function getType(){
+    if(projectId){
+      // initialize delivery client
+      const deliveryClient = createDeliveryClient({
+      projectId: projectId
+      });
+  
+      const types = await deliveryClient.types().toPromise()
+  
+      const type = types.data.items.filter(type => type.system.id === selectedItemTypes[0])
+      if(type[0]?.system.codename){
+        const typeCodename = type[0]?.system.codename
+        setSelectedItemTypes([typeCodename])
+      }
+    }
+  })();
 
   if (!config || !projectId || elementValue === null || watchedElementValue === null || itemName === null) {
     return null;
@@ -73,23 +91,10 @@ export const IntegrationApp: FC = () => {
         This is a great integration with the Kontent.ai app.
       </h1>
       <section>
-        projectId: {projectId}; item name: {itemName}
-      </section>
-      <section>
-        configuration: {JSON.stringify(config)}
-      </section>
-      <section>
-        <input value={elementValue} onChange={e => updateValue(e.target.value)} disabled={isDisabled} />
-      </section>
-      <section>
         This is the watched element: {watchedElementValue}
       </section>
       <section>
-        These are your selected asset names: {selectedAssetNames.join(', ')}
-        <button onClick={selectAssets}>Select different assets</button>
-      </section>
-      <section>
-        These are your selected item names: {selectedItemNames.join(', ')}
+        These are your selected item names and types: {selectedItemNames.join(', ')} - {selectedItemTypes.join(', ')}
         <button onClick={selectItems}>Select different items</button>
       </section>
     </>

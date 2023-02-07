@@ -2,6 +2,7 @@
   "name": "integration-template-react",
   "version": "1.0.0",
   "dependencies": {
+    "@kontent-ai/delivery-sdk": "^12.4.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
