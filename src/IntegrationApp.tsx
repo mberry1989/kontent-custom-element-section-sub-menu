@@ -84,7 +84,9 @@ export const IntegrationApp: FC = () => {
         This is the watched element: {watchedElementValue}
       </section>
       <section>
-        These are your selected item names and types: {selectedItemNames.join(', ')} 
+        These are your selected item names: {selectedItemNames.join(', ')} 
+
+        and here are the types:
         - {selectedItemTypes.join(', ')} - {selectedItemTypeElements}
         <button onClick={selectItems}>Select different items</button>
       </section>
