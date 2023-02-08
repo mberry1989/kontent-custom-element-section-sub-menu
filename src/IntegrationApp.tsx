@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import { createDeliveryClient } from '@kontent-ai/delivery-sdk';
 
 export const IntegrationApp: FC = () => {
@@ -8,7 +8,8 @@ export const IntegrationApp: FC = () => {
   const [watchedElementValue, setWatchedElementValue] = useState<string | null>(null);
   const [selectedItemNames, setSelectedItemNames] = useState<ReadonlyArray<string>>([]);
   const [selectedItemTypes, setSelectedItemTypes]  = useState<ReadonlyArray<string>>([]);
-  const [selectedItemTypeElements, setSelectedItemTypeElements]  = useState<ReadonlyArray<string>>([]);
+  const [checkboxes, setCheckboxes] = useState<Array<string>>()
+  const [checkedBoxes, setCheckedBoxes] = useState<Array<string>>([])
   const [elementValue, setElementValue] = useState<string | null>(null);
 
   const updateWatchedElementValue = useCallback((codename: string) => {
@@ -65,8 +66,19 @@ export const IntegrationApp: FC = () => {
   
       const type = types.data.items.filter(type => type.system.id === selectedItemTypes[0])
       if(type[0]?.system.codename){
-        const typeElements = `${type[0]?.system.codename} : ${JSON.stringify(type[0].elements)}`
-        setSelectedItemTypeElements([typeElements])
+
+        const elementValues = Object.values(type[0].elements)
+
+        let checkboxesArr: Array<string> = []
+
+        // save codename array in state
+        elementValues.forEach(element => {
+          if(element.codename){
+              checkboxesArr.push(element.codename)
+          }
+        });
+
+        setCheckboxes(checkboxesArr)
       }
     }
   })();
@@ -74,6 +86,17 @@ export const IntegrationApp: FC = () => {
   if (!config || !projectId || elementValue === null || watchedElementValue === null || itemName === null) {
     return null;
   }
+
+  const handleChecked = (event:ChangeEvent<HTMLInputElement>) => {
+    if(event.target.checked){
+      setCheckedBoxes(checkedBoxes => [...checkedBoxes, event.target.value]);
+    }
+    else {
+      const removeUnchecked = checkedBoxes.filter(box => box !== event.target.value)
+      setCheckedBoxes(removeUnchecked)
+    }
+    
+}
 
   return (
     <>
@@ -87,7 +110,13 @@ export const IntegrationApp: FC = () => {
         These are your selected item names: {selectedItemNames.join(', ')} 
 
         and here are the types:
-        - {selectedItemTypes.join(', ')} - {selectedItemTypeElements.join(', ')}
+        - {selectedItemTypes.join(', ')} -
+        {checkboxes && checkboxes.map(box => {
+          let checked:boolean = checkboxes.includes(box)
+          return (
+            <input type='checkbox' checked={checked} title={box} value={box} onChange={handleChecked}/>
+          )
+        })}
         <button onClick={selectItems}>Select different items</button>
       </section>
     </>
