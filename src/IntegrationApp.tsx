@@ -10,6 +10,7 @@ export const IntegrationApp: FC = () => {
   const [selectedItemTypes, setSelectedItemTypes]  = useState<ReadonlyArray<string>>([]);
   const [checkboxes, setCheckboxes] = useState<Array<string>>()
   const [checkedBoxes, setCheckedBoxes] = useState<Array<string>>([])
+  const [previouslyCheckedBoxes, setpreviouslyCheckedBoxes] = useState<Array<string>>([])
   const [elementValue, setElementValue] = useState<string | null>(null);
 
   const updateWatchedElementValue = useCallback((codename: string) => {
@@ -31,7 +32,7 @@ export const IntegrationApp: FC = () => {
         getExistingChecked(context.item.codename).then(res => {
           if(res) {
             console.log(`setting checked boxes state ... ${res}`)
-            setCheckedBoxes(res)
+            setpreviouslyCheckedBoxes(res)
           }
         })
         
@@ -157,7 +158,7 @@ export const IntegrationApp: FC = () => {
         })}
         </ul>
         <div>Checked Boxes: {checkedBoxes}</div>
-        <div>previously checked boxes: {checkboxes}</div>
+        <div>previously checked boxes: {previouslyCheckedBoxes}</div>
 
       </section>
     </>
