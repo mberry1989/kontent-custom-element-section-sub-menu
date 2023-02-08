@@ -119,6 +119,7 @@ export const IntegrationApp: FC = () => {
           )
         })}
         </ul>
+        Checked Boxes: {checkedBoxes}
         <button onClick={selectItems}>Select different items</button>
       </section>
     </>
