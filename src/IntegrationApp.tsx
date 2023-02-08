@@ -70,7 +70,7 @@ export const IntegrationApp: FC = () => {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemCodename]);
+  }, []);
 
   useEffect(() => {
     CustomElement.setHeight(500);
