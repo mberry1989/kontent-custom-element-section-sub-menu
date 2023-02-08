@@ -35,7 +35,7 @@ export const IntegrationApp: FC = () => {
 
   function getExistingChecked(codename:string){
     //API logic to get existing checked boxes
-    function getCheckboxes(codename:string){
+    async function getCheckboxes(codename:string){
       //TODO: abstract delivery client setup for re-use
       if(projectId){
         const deliveryClient = createDeliveryClient({
@@ -43,20 +43,18 @@ export const IntegrationApp: FC = () => {
         });
 
         //TODO: make element codename dynamic - from config
-        deliveryClient.item(codename)
+        await deliveryClient.item(codename)
         .elementsParameter(['custom_sub_menu'])
         .toPromise()
         .then(res => {
+          console.log(res)
           setpreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
         });
       }
     };
     
-    const checked = getCheckboxes(codename);
+    getCheckboxes(codename);
 
-    console.log(`checked const passed back to parent function: ${checked}`)
-
-    return checked
   }
 
   useEffect(() => {
