@@ -151,7 +151,9 @@ export const IntegrationApp: FC = () => {
           )
         })}
         </ul>
-        Checked Boxes: {checkedBoxes}
+        <div>Checked Boxes: {checkedBoxes}</div>
+        <div>previously checked boxes: {checkboxes}</div>
+
       </section>
     </>
   );
