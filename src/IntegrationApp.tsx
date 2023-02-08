@@ -107,16 +107,18 @@ export const IntegrationApp: FC = () => {
         This is the watched element: {watchedElementValue}
       </section>
       <section>
-        These are your selected item names: {selectedItemNames.join(', ')} 
-
-        and here are the types:
+        These are your selected item names: {selectedItemNames.join(', ')} -
         - {selectedItemTypes.join(', ')} -
+        <ul>
         {checkboxes && checkboxes.map(box => {
-          let checked:boolean = checkboxes.includes(box)
+          let checked:boolean = checkedBoxes.includes(box)
           return (
-            <input type='checkbox' checked={checked} title={box} value={box} onChange={handleChecked}/>
+            <li>
+              <input type='checkbox' checked={checked} title={box} value={box} onChange={handleChecked}/>codename:{box}
+            </li>
           )
         })}
+        </ul>
         <button onClick={selectItems}>Select different items</button>
       </section>
     </>
