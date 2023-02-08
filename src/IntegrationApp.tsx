@@ -5,12 +5,13 @@ export const IntegrationApp: FC = () => {
   const [config, setConfig] = useState<Config | null>(null);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [itemName, setItemName] = useState<string | null>(null);
+  const [itemCodename, setItemCodename] = useState<string | null>(null);
   const [watchedElementValue, setWatchedElementValue] = useState<string | null>(null);
   const [selectedItemNames, setSelectedItemNames] = useState<ReadonlyArray<string>>([]);
   const [selectedItemTypes, setSelectedItemTypes]  = useState<ReadonlyArray<string>>([]);
   const [checkboxes, setCheckboxes] = useState<Array<string>>()
   const [checkedBoxes, setCheckedBoxes] = useState<Array<string>>([])
-  const [previouslyCheckedBoxes, setpreviouslyCheckedBoxes] = useState<Array<string>>([])
+  const [previouslyCheckedBoxes, setpreviouslyCheckedBoxes] = useState<Array<string>>()
   const [elementValue, setElementValue] = useState<string | null>(null);
 
   const updateWatchedElementValue = useCallback((codename: string) => {
@@ -22,39 +23,15 @@ export const IntegrationApp: FC = () => {
       if (!isConfig(element.config)) {
         throw new Error('Invalid configuration of the custom element. Please check the documentation.');
       }
-
       setConfig(element.config);
       setProjectId(context.projectId);
       setItemName(context.item.name);
+      setItemCodename(context.item.codename)
       setElementValue(element.value ?? '');
       updateWatchedElementValue(element.config.textElementCodename);
-      if(context.item.codename){
-        getExistingChecked(context.item.codename).then(res => {
-          if(res) {
-            console.log(`setting checked boxes state ... ${res}`)
-            setpreviouslyCheckedBoxes(res)
-          }
-        })
-        
-      }
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateWatchedElementValue]);
-
-  useEffect(() => {
-    CustomElement.setHeight(500);
-  }, []);
-
-  useEffect(() => {
-    CustomElement.observeItemChanges(i => setItemName(i.name));
-  }, []);
-
-  useEffect(() => {
-    if (!config) {
-      return;
-    }
-    CustomElement.observeElementChanges([config.textElementCodename], () => updateWatchedElementValue(config.textElementCodename));
-  }, [config, updateWatchedElementValue]);
 
   function getExistingChecked(codename:string){
     //API logic to get existing checked boxes
@@ -82,6 +59,33 @@ export const IntegrationApp: FC = () => {
 
     return checked
   }
+
+  useEffect(() => {
+    if(itemCodename){
+      getExistingChecked(itemCodename).then(res => {
+        if(res) {
+          console.log(`setting checked boxes state ... ${res}`)
+          setpreviouslyCheckedBoxes(res)
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemCodename]);
+
+  useEffect(() => {
+    CustomElement.setHeight(500);
+  }, []);
+
+  useEffect(() => {
+    CustomElement.observeItemChanges(i => setItemName(i.name));
+  }, []);
+
+  useEffect(() => {
+    if (!config) {
+      return;
+    }
+    CustomElement.observeElementChanges([config.textElementCodename], () => updateWatchedElementValue(config.textElementCodename));
+  }, [config, updateWatchedElementValue]);
 
   const selectItems = () =>
     CustomElement.selectItems({ allowMultiple: true })
