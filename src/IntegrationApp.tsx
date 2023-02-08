@@ -27,6 +27,13 @@ export const IntegrationApp: FC = () => {
       setItemName(context.item.name);
       setElementValue(element.value ?? '');
       updateWatchedElementValue(element.config.textElementCodename);
+      if(context.item.codename){
+        getExistingChecked(context.item.codename).then(res => {
+          if(res)
+            setCheckedBoxes(res)
+        })
+        
+      }
     });
   }, [updateWatchedElementValue]);
 
@@ -45,6 +52,30 @@ export const IntegrationApp: FC = () => {
     CustomElement.observeElementChanges([config.textElementCodename], () => updateWatchedElementValue(config.textElementCodename));
   }, [config, updateWatchedElementValue]);
 
+  function getExistingChecked(codename:string){
+    //API logic to get existing checked boxes
+    async function getCheckboxes(codename:string){
+      //TODO: abstract delivery client setup for re-use
+      if(projectId){
+        const deliveryClient = createDeliveryClient({
+        projectId: projectId
+        });
+
+        //TODO: make element codename dynamic - from config
+        const item:Array<string> = await deliveryClient.item(codename)
+        .elementsParameter(['custom_sub_menu'])
+        .toPromise()
+        .then(res => (res.data.item.elements[0]?.value));
+
+        return item;
+      }
+    };
+    
+    const checked = getCheckboxes(codename);
+
+    return checked
+  }
+
   const selectItems = () =>
     CustomElement.selectItems({ allowMultiple: true })
       .then(ids => CustomElement.getItemDetails(ids?.map(i => i.id) ?? []))
@@ -57,7 +88,7 @@ export const IntegrationApp: FC = () => {
 
   (async function getType(){
     if(projectId){
-      // initialize delivery client
+      //TODO: abstract delivery client setup for re-use
       const deliveryClient = createDeliveryClient({
       projectId: projectId
       });
