@@ -35,7 +35,7 @@ export const IntegrationApp: FC = () => {
 
   function getExistingChecked(codename:string){
     //API logic to get existing checked boxes
-    async function getCheckboxes(codename:string){
+    function getCheckboxes(codename:string){
       //TODO: abstract delivery client setup for re-use
       if(projectId){
         const deliveryClient = createDeliveryClient({
@@ -43,13 +43,12 @@ export const IntegrationApp: FC = () => {
         });
 
         //TODO: make element codename dynamic - from config
-        const item:Array<string> = await deliveryClient.item(codename)
+        deliveryClient.item(codename)
         .elementsParameter(['custom_sub_menu'])
         .toPromise()
-        .then(res => (res.data.item.elements[0]?.value));
-
-        console.log(`item to be returned for state setting ${item}`)
-        return item;
+        .then(res => {
+          setpreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
+        });
       }
     };
     
@@ -62,15 +61,10 @@ export const IntegrationApp: FC = () => {
 
   useEffect(() => {
     if(itemCodename){
-      getExistingChecked(itemCodename).then(res => {
-        if(res) {
-          console.log(`setting checked boxes state ... ${res}`)
-          setpreviouslyCheckedBoxes(res)
-        }
-      })
-    }
+      getExistingChecked(itemCodename)
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    }, []);
 
   useEffect(() => {
     CustomElement.setHeight(500);
@@ -161,6 +155,7 @@ export const IntegrationApp: FC = () => {
           )
         })}
         </ul>
+        <div>Current item codename: {itemCodename}</div>
         <div>Checked Boxes: {checkedBoxes}</div>
         <div>previously checked boxes: {previouslyCheckedBoxes}</div>
 
