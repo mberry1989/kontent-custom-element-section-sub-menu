@@ -29,8 +29,10 @@ export const IntegrationApp: FC = () => {
       updateWatchedElementValue(element.config.textElementCodename);
       if(context.item.codename){
         getExistingChecked(context.item.codename).then(res => {
-          if(res)
+          if(res) {
+            console.log(`setting checked boxes state ... ${res}`)
             setCheckedBoxes(res)
+          }
         })
         
       }
@@ -68,11 +70,14 @@ export const IntegrationApp: FC = () => {
         .toPromise()
         .then(res => (res.data.item.elements[0]?.value));
 
+        console.log(`item to be returned for state setting ${item}`)
         return item;
       }
     };
     
     const checked = getCheckboxes(codename);
+
+    console.log(`checked const passed back to parent function: ${checked}`)
 
     return checked
   }
