@@ -95,17 +95,17 @@ export const IntegrationApp: FC = () => {
       const removeUnchecked = checkedBoxes.filter(box => box !== event.target.value)
       setCheckedBoxes(removeUnchecked)
     }
+
+    CustomElement.setValue(checkedBoxes)
     
 }
 
   return (
     <>
       <h1>
-        This is a great integration with the Kontent.ai app.
+        Select the item that you want to generate a submenu for:
+        <button onClick={selectItems}>Select different items</button>
       </h1>
-      <section>
-        This is the watched element: {watchedElementValue}
-      </section>
       <section>
         These are your selected item names: {selectedItemNames.join(', ')} -
         - {selectedItemTypes.join(', ')} -
@@ -120,7 +120,6 @@ export const IntegrationApp: FC = () => {
         })}
         </ul>
         Checked Boxes: {checkedBoxes}
-        <button onClick={selectItems}>Select different items</button>
       </section>
     </>
   );
