@@ -36,7 +36,7 @@ export const IntegrationApp: FC = () => {
 
   function getExistingChecked(codename:string){
     //API logic to get existing checked boxes
-    async function getCheckboxes(codename:string){
+    function getCheckboxes(codename:string){
       //TODO: abstract delivery client setup for re-use
       if(projectId){
         const deliveryClient = createDeliveryClient({
@@ -44,7 +44,7 @@ export const IntegrationApp: FC = () => {
         });
 
         //TODO: make element codename dynamic - from config
-        await deliveryClient.item(codename)
+        deliveryClient.item(codename)
         .elementsParameter(['custom_sub_menu'])
         .toPromise()
         .then(res => {
