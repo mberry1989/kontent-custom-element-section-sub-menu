@@ -96,7 +96,7 @@ export const IntegrationApp: FC = () => {
       setCheckedBoxes(removeUnchecked)
     }
 
-    CustomElement.setValue(checkedBoxes)
+    CustomElement.setValue(JSON.stringify(checkedBoxes))
     
 }
 
