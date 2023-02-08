@@ -12,6 +12,7 @@ export const IntegrationApp: FC = () => {
   const [checkboxes, setCheckboxes] = useState<Array<string>>()
   const [checkedBoxes, setCheckedBoxes] = useState<Array<string>>([])
   const [previouslyCheckedBoxes, setpreviouslyCheckedBoxes] = useState<Array<string>>()
+  const [isLoading, setIsLoading] = useState<Boolean>(true)
   const [elementValue, setElementValue] = useState<string | null>(null);
 
   const updateWatchedElementValue = useCallback((codename: string) => {
@@ -49,6 +50,7 @@ export const IntegrationApp: FC = () => {
         .then(res => {
           //setpreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
           setpreviouslyCheckedBoxes(['test', 'test2', 'test3'])
+          setIsLoading(false)
         });
       }
     };
@@ -136,6 +138,8 @@ export const IntegrationApp: FC = () => {
 
   return (
     <>
+      {isLoading ? <div>isLoading...</div> : 
+      <div>
       <h1>
         Select the item that you want to generate a submenu for:
         <button onClick={selectItems}>Select different items</button>
@@ -158,7 +162,10 @@ export const IntegrationApp: FC = () => {
         <div>previously checked boxes: {previouslyCheckedBoxes}</div>
 
       </section>
+      </div>
+    }
     </>
+  
   );
 };
 
