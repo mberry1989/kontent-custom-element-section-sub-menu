@@ -47,8 +47,8 @@ export const IntegrationApp: FC = () => {
         .elementsParameter(['custom_sub_menu'])
         .toPromise()
         .then(res => {
-          console.log(res)
-          setpreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
+          //setpreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
+          setpreviouslyCheckedBoxes(['test', 'test2', 'test3'])
         });
       }
     };
