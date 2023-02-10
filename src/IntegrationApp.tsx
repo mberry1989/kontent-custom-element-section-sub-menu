@@ -147,6 +147,8 @@ export const IntegrationApp: FC = () => {
           })}
           </ul>
         </div>
+
+        <h3>{elementValue}</h3>
       </section>
       </div>
     }
