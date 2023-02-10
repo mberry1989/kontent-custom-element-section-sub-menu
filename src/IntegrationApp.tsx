@@ -31,7 +31,7 @@ export const IntegrationApp: FC = () => {
             .elementsParameter(['custom_sub_menu'])
             .toPromise()
             .then(res => {
-              setPreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
+              return res.data.item
             })
 
           console.log(menu)
