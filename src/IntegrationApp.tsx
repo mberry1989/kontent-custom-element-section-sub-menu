@@ -19,6 +19,11 @@ export const IntegrationApp: FC = () => {
     CustomElement.getElementValue(codename, v => typeof v === 'string' && setWatchedElementValue(v));
   }, []);
 
+  const showPreviouslySelectedValues = useCallback((codename:string) => {
+    setPreviouslyCheckedBoxes(['test', 'test2', 'test3'])
+    setIsLoading(false)
+  },[]);
+
   useEffect(() => {
     CustomElement.init((element, context) => {
       if (!isConfig(element.config)) {
@@ -30,40 +35,42 @@ export const IntegrationApp: FC = () => {
       setItemCodename(context.item.codename)
       setElementValue(element.value ?? '');
       updateWatchedElementValue(element.config.textElementCodename);
-      if(itemCodename){
-        getExistingChecked(itemCodename)
-      }
+      showPreviouslySelectedValues(context.item.codename);
+      // if(itemCodename){
+      //   getExistingChecked(itemCodename)
+      // }
+
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateWatchedElementValue]);
 
-  function getExistingChecked(codename:string){
-    //API logic to get existing checked boxes
-    setPreviouslyCheckedBoxes(['test', 'test2', 'test3'])
-    setIsLoading(false)
-
-    // function getCheckboxes(codename:string){
-    //   //TODO: abstract delivery client setup for re-use
-    //   if(projectId){
-    //     const deliveryClient = createDeliveryClient({
-    //     projectId: projectId
-    //     });
-
-    //     //TODO: make element codename dynamic - from config
-    //     deliveryClient.item(codename)
-    //     .elementsParameter(['custom_sub_menu'])
-    //     .toPromise()
-    //     .then(res => {
-    //       //setpreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
-    //       // setPreviouslyCheckedBoxes(['test', 'test2', 'test3'])
-    //       // setIsLoading(false)
-    //     });
-    //   }
-    // };
+  // function getExistingChecked(codename:string){
+  //   //API logic to get existing checked boxes
     
-    // getCheckboxes(codename);
+  //   setIsLoading(false)
 
-  }
+  //   // function getCheckboxes(codename:string){
+  //   //   //TODO: abstract delivery client setup for re-use
+  //   //   if(projectId){
+  //   //     const deliveryClient = createDeliveryClient({
+  //   //     projectId: projectId
+  //   //     });
+
+  //   //     //TODO: make element codename dynamic - from config
+  //   //     deliveryClient.item(codename)
+  //   //     .elementsParameter(['custom_sub_menu'])
+  //   //     .toPromise()
+  //   //     .then(res => {
+  //   //       //setpreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
+  //   //       // setPreviouslyCheckedBoxes(['test', 'test2', 'test3'])
+  //   //       // setIsLoading(false)
+  //   //     });
+  //   //   }
+  //   // };
+    
+  //   // getCheckboxes(codename);
+
+  // }
 
   useEffect(() => {
     CustomElement.setHeight(500);
