@@ -5,8 +5,6 @@ export const IntegrationApp: FC = () => {
   const [config, setConfig] = useState<Config | null>(null);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [itemName, setItemName] = useState<string | null>(null);
-  const [itemCodename, setItemCodename] = useState<string | null>(null);
-  const [watchedElementValue, setWatchedElementValue] = useState<string | null>(null);
   const [selectedItemNames, setSelectedItemNames] = useState<ReadonlyArray<string>>([]);
   const [selectedItemTypes, setSelectedItemTypes]  = useState<ReadonlyArray<string>>([]);
   const [checkboxes, setCheckboxes] = useState<Array<string>>()
@@ -14,10 +12,6 @@ export const IntegrationApp: FC = () => {
   const [previouslyCheckedBoxes, setPreviouslyCheckedBoxes] = useState<Array<string>>([])
   const [isLoading, setIsLoading] = useState<Boolean>(true)
   const [elementValue, setElementValue] = useState<string | null>(null);
-
-  const updateWatchedElementValue = useCallback((codename: string) => {
-    CustomElement.getElementValue(codename, v => typeof v === 'string' && setWatchedElementValue(v));
-  }, []);
 
   const showPreviouslySelectedValues = useCallback(async (projectId: string, codename:string) => {
       //   //TODO: abstract delivery client setup for re-use
@@ -46,16 +40,14 @@ export const IntegrationApp: FC = () => {
       setConfig(element.config);
       setProjectId(context.projectId);
       setItemName(context.item.name);
-      setItemCodename(context.item.codename)
       setElementValue(element.value ?? '');
-      updateWatchedElementValue(element.config.textElementCodename);
       showPreviouslySelectedValues(context.projectId, context.item.codename);
       if(previouslyCheckedBoxes){
         setIsLoading(false)
       }
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateWatchedElementValue]);
+  }, []);
 
   useEffect(() => {
     CustomElement.setHeight(500);
@@ -64,13 +56,6 @@ export const IntegrationApp: FC = () => {
   useEffect(() => {
     CustomElement.observeItemChanges(i => setItemName(i.name));
   }, []);
-
-  useEffect(() => {
-    if (!config) {
-      return;
-    }
-    CustomElement.observeElementChanges([config.textElementCodename], () => updateWatchedElementValue(config.textElementCodename));
-  }, [config, updateWatchedElementValue]);
 
   const selectItems = () =>
     CustomElement.selectItems({ allowMultiple: true })
@@ -110,7 +95,7 @@ export const IntegrationApp: FC = () => {
     }
   })();
 
-  if (!config || !projectId || elementValue === null || watchedElementValue === null || itemName === null) {
+  if (!config || !projectId || elementValue === null || itemName === null) {
     return null;
   }
 
