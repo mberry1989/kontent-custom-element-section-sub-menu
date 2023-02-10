@@ -27,7 +27,7 @@ export const IntegrationApp: FC = () => {
             .then(res => {
               return res.data.item
             })
-          setPreviouslyCheckedBoxes(menu.elements['custom_sub_menu']?.value)
+          setPreviouslyCheckedBoxes(JSON.parse(menu.elements['custom_sub_menu']?.value))
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
@@ -122,7 +122,7 @@ export const IntegrationApp: FC = () => {
       <section>
       <button onClick={selectItems}>Select different items</button>
         <h3>Selected Item for Sub Menu:</h3>
-          {selectedItemNames.join(', ')}
+          {selectedItemNames.join(', ')} Content Item --
           <div>
               <ul>
               {checkboxes && checkboxes.map(box => {
