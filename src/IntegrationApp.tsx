@@ -76,7 +76,8 @@ export const IntegrationApp: FC = () => {
 
   const handleChecked = (event:ChangeEvent<HTMLInputElement>) => {
     if(event.target.checked){
-      setCheckedBoxes(checkedBoxes => [...checkedBoxes, event.target.value]);
+      const newChecked =  [...checkedBoxes, event.target.value]
+      setCheckedBoxes(newChecked);
     }
     else {
       const removeUnchecked = checkedBoxes.filter(box => box !== event.target.value)
@@ -120,8 +121,6 @@ export const IntegrationApp: FC = () => {
           })}
           </ul>
         </div>
-
-        <h3>{elementValue}</h3>
       </section>
       </div>
   
