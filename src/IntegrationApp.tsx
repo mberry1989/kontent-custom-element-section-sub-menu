@@ -20,8 +20,23 @@ export const IntegrationApp: FC = () => {
   }, []);
 
   const showPreviouslySelectedValues = useCallback(async (codename:string) => {
-    const menu = await getExistingChecked(codename)
-    setPreviouslyCheckedBoxes(menu)
+      //   //TODO: abstract delivery client setup for re-use
+        if(projectId){
+          const deliveryClient = createDeliveryClient({
+          projectId: projectId
+          });
+
+          //TODO: make element codename dynamic - from config
+          const menu = await deliveryClient.item(codename)
+            .elementsParameter(['custom_sub_menu'])
+            .toPromise()
+            .then(res => {
+              setPreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
+            })
+        }
+        else{
+          setPreviouslyCheckedBoxes(['test1', 'test2', 'test3'])
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
@@ -42,26 +57,7 @@ export const IntegrationApp: FC = () => {
       }
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateWatchedElementValue, showPreviouslySelectedValues]);
-
-  async function getExistingChecked(codename:string){
-      //   //TODO: abstract delivery client setup for re-use
-        if(projectId){
-          const deliveryClient = createDeliveryClient({
-          projectId: projectId
-          });
-
-          //TODO: make element codename dynamic - from config
-          const menu:Array<string> = await deliveryClient.item(codename)
-          .elementsParameter(['custom_sub_menu'])
-          .toPromise()
-          .then((res) => {
-            return res.data.item.elements[0]?.value
-          })
-          return menu
-        }
-      return ['test1', 'test2', 'test3']
-  }
+  }, [updateWatchedElementValue]);
 
   useEffect(() => {
     CustomElement.setHeight(500);
