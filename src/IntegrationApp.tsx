@@ -20,7 +20,7 @@ export const IntegrationApp: FC = () => {
   }, []);
 
   const showPreviouslySelectedValues = useCallback((codename:string) => {
-    setPreviouslyCheckedBoxes(['test', 'test2', 'test3'])
+    getExistingChecked(codename)
     setIsLoading(false)
   },[]);
 
@@ -44,33 +44,25 @@ export const IntegrationApp: FC = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateWatchedElementValue, showPreviouslySelectedValues]);
 
-  // function getExistingChecked(codename:string){
-  //   //API logic to get existing checked boxes
-    
-  //   setIsLoading(false)
+  function getExistingChecked(codename:string){
+    (async function getPreviouslyChecked(codename){
+      //API logic to get existing checked boxes
+      //   //TODO: abstract delivery client setup for re-use
+        if(projectId){
+          const deliveryClient = createDeliveryClient({
+          projectId: projectId
+          });
 
-  //   // function getCheckboxes(codename:string){
-  //   //   //TODO: abstract delivery client setup for re-use
-  //   //   if(projectId){
-  //   //     const deliveryClient = createDeliveryClient({
-  //   //     projectId: projectId
-  //   //     });
+          //TODO: make element codename dynamic - from config
+          const menu:Array<string> = await deliveryClient.item(codename)
+          .elementsParameter(['custom_sub_menu'])
+          .toPromise()
+          .then(res => (res.data.item.elements[0]?.value))
 
-  //   //     //TODO: make element codename dynamic - from config
-  //   //     deliveryClient.item(codename)
-  //   //     .elementsParameter(['custom_sub_menu'])
-  //   //     .toPromise()
-  //   //     .then(res => {
-  //   //       //setpreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
-  //   //       // setPreviouslyCheckedBoxes(['test', 'test2', 'test3'])
-  //   //       // setIsLoading(false)
-  //   //     });
-  //   //   }
-  //   // };
-    
-  //   // getCheckboxes(codename);
-
-  // }
+          setPreviouslyCheckedBoxes(menu)
+        }
+      })(codename); 
+  }
 
   useEffect(() => {
     CustomElement.setHeight(500);
