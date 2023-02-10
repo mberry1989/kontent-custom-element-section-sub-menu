@@ -118,26 +118,34 @@ export const IntegrationApp: FC = () => {
       <div>
       <h1>
         Select the item that you want to generate a submenu for:
-        <button onClick={selectItems}>Select different items</button>
       </h1>
       <section>
+      <button onClick={selectItems}>Select different items</button>
         <h3>Selected Item for Sub Menu:</h3>
           {selectedItemNames.join(', ')}
           <div>
-            <ul>
-            {checkboxes && checkboxes.map(box => {
-              let checked:boolean = checkedBoxes.includes(box)
-              return (
-                <li>
-                  <input type='checkbox' checked={checked} title={box} value={box} onChange={handleChecked}/>codename: {box}
-                </li>
-              )
-            })}
-            </ul>
+              <ul>
+              {checkboxes && checkboxes.map(box => {
+                let checked:boolean = checkedBoxes.includes(box)
+                return (
+                  <li>
+                    <input type='checkbox' checked={checked} title={box} value={box} onChange={handleChecked}/>codename: {box}
+                  </li>
+                )
+              })}
+              </ul>
         </div>
         <div>
           <h4>previously checked boxes:</h4> 
-          {previouslyCheckedBoxes}
+          <ul>
+          {previouslyCheckedBoxes && previouslyCheckedBoxes.map(checkedBox => {
+            return (
+              <li>
+                {checkedBox}
+              </li>
+            )
+          })}
+          </ul>
         </div>
       </section>
       </div>
