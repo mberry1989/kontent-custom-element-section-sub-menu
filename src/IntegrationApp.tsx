@@ -76,7 +76,7 @@ export const IntegrationApp: FC = () => {
 
   const handleChecked = (event:ChangeEvent<HTMLInputElement>) => {
     if(event.target.checked){
-      const newChecked =  [...checkedBoxes, event.target.value]
+      const newChecked = [...checkedBoxes, event.target.value]
       setCheckedBoxes(newChecked);
     }
     else {
@@ -102,7 +102,7 @@ export const IntegrationApp: FC = () => {
               {checkboxes && checkboxes.map(box => {
                 let checked:boolean = checkedBoxes.includes(box)
                 return (
-                  <li>
+                  <li key={box}>
                     <input type='checkbox' checked={checked} title={box} value={box} onChange={handleChecked}/>element: {box}
                   </li>
                 )
