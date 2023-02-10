@@ -137,10 +137,7 @@ export const IntegrationApp: FC = () => {
         </div>
         <div>
           <h4>previously checked boxes:</h4> 
-          {previouslyCheckedBoxes.map(box => {
-            return <div>{box}</div>
-            })
-          }
+          {previouslyCheckedBoxes}
         </div>
       </section>
       </div>
