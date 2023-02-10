@@ -22,9 +22,6 @@ export const IntegrationApp: FC = () => {
   const showPreviouslySelectedValues = useCallback(async (codename:string) => {
     const menu = await getExistingChecked(codename)
     setPreviouslyCheckedBoxes(menu)
-    if(previouslyCheckedBoxes){
-      setIsLoading(false)
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
@@ -40,6 +37,9 @@ export const IntegrationApp: FC = () => {
       setElementValue(element.value ?? '');
       updateWatchedElementValue(element.config.textElementCodename);
       showPreviouslySelectedValues(context.item.codename);
+      if(previouslyCheckedBoxes){
+        setIsLoading(false)
+      }
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateWatchedElementValue, showPreviouslySelectedValues]);
