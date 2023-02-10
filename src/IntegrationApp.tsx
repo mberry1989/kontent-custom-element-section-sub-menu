@@ -22,7 +22,9 @@ export const IntegrationApp: FC = () => {
   const showPreviouslySelectedValues = useCallback(async (codename:string) => {
     const menu = await getExistingChecked(codename)
     setPreviouslyCheckedBoxes(menu)
-    setIsLoading(false)
+    if(previouslyCheckedBoxes){
+      setIsLoading(false)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
@@ -50,13 +52,15 @@ export const IntegrationApp: FC = () => {
           });
 
           //TODO: make element codename dynamic - from config
-          const menu = await deliveryClient.item(codename)
+          const menu:Array<string> = await deliveryClient.item(codename)
           .elementsParameter(['custom_sub_menu'])
           .toPromise()
-          .then(res => (res.data.item.elements[0]?.value))
-
+          .then((res) => {
+            return res.data.item.elements[0]?.value
+          })
           return menu
         }
+      return ['test1', 'test2', 'test3']
   }
 
   useEffect(() => {
