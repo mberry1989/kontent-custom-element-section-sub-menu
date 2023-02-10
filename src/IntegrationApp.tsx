@@ -22,6 +22,7 @@ export const IntegrationApp: FC = () => {
   const showPreviouslySelectedValues = useCallback((codename:string) => {
     getExistingChecked(codename)
     setIsLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
   useEffect(() => {
