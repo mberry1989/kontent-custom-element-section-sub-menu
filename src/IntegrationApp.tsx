@@ -61,7 +61,7 @@ export const IntegrationApp: FC = () => {
         // save codename array in state
         elementValues.forEach(element => {
           if(element.codename){
-              checkboxesArr.push(element.codename)
+              checkboxesArr.push(`${element.codename} | ${element.name}`)
           }
         });
 
@@ -103,7 +103,7 @@ export const IntegrationApp: FC = () => {
                 let checked:boolean = checkedBoxes.includes(box)
                 return (
                   <li>
-                    <input type='checkbox' checked={checked} title={box} value={box} onChange={handleChecked}/>codename: {box}
+                    <input type='checkbox' checked={checked} title={box} value={box} onChange={handleChecked}/>element: {box}
                   </li>
                 )
               })}
