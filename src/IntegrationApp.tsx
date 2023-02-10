@@ -42,7 +42,7 @@ export const IntegrationApp: FC = () => {
 
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateWatchedElementValue]);
+  }, [updateWatchedElementValue, showPreviouslySelectedValues]);
 
   // function getExistingChecked(codename:string){
   //   //API logic to get existing checked boxes
