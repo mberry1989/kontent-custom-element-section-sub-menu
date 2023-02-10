@@ -19,7 +19,7 @@ export const IntegrationApp: FC = () => {
     CustomElement.getElementValue(codename, v => typeof v === 'string' && setWatchedElementValue(v));
   }, []);
 
-  const showPreviouslySelectedValues = useCallback(async (codename:string) => {
+  const showPreviouslySelectedValues = useCallback(async (projectId: string, codename:string) => {
       //   //TODO: abstract delivery client setup for re-use
         if(projectId){
           const deliveryClient = createDeliveryClient({
@@ -53,7 +53,7 @@ export const IntegrationApp: FC = () => {
       setItemCodename(context.item.codename)
       setElementValue(element.value ?? '');
       updateWatchedElementValue(element.config.textElementCodename);
-      showPreviouslySelectedValues(context.item.codename);
+      showPreviouslySelectedValues(context.projectId, context.item.codename);
       if(previouslyCheckedBoxes){
         setIsLoading(false)
       }
