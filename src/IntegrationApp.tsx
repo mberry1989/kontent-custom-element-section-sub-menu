@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { createDeliveryClient } from '@kontent-ai/delivery-sdk';
 
 export const IntegrationApp: FC = () => {
@@ -9,28 +9,7 @@ export const IntegrationApp: FC = () => {
   const [selectedItemTypes, setSelectedItemTypes]  = useState<ReadonlyArray<string>>([]);
   const [checkboxes, setCheckboxes] = useState<Array<string>>()
   const [checkedBoxes, setCheckedBoxes] = useState<Array<string>>([])
-  const [previouslyCheckedBoxes, setPreviouslyCheckedBoxes] = useState<Array<string>>([])
-  const [isLoading, setIsLoading] = useState<Boolean>(true)
-  const [elementValue, setElementValue] = useState<string | null>(null);
-
-  const showPreviouslySelectedValues = useCallback(async (projectId: string, codename:string) => {
-      //   //TODO: abstract delivery client setup for re-use
-        if(projectId){
-          const deliveryClient = createDeliveryClient({
-          projectId: projectId
-          });
-
-          //TODO: make element codename dynamic - from config
-          const menu = await deliveryClient.item(codename)
-            .elementsParameter(['custom_sub_menu'])
-            .toPromise()
-            .then(res => {
-              return res.data.item
-            })
-          setPreviouslyCheckedBoxes(JSON.parse(menu.elements['custom_sub_menu']?.value))
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  const [elementValue, setElementValue] = useState<Array<string>>([]);
 
   useEffect(() => {
     CustomElement.init((element, context) => {
@@ -40,11 +19,7 @@ export const IntegrationApp: FC = () => {
       setConfig(element.config);
       setProjectId(context.projectId);
       setItemName(context.item.name);
-      setElementValue(element.value ?? '');
-      showPreviouslySelectedValues(context.projectId, context.item.codename);
-      if(previouslyCheckedBoxes){
-        setIsLoading(false)
-      }
+      setElementValue(JSON.parse(element.value) ?? '');
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -113,8 +88,6 @@ export const IntegrationApp: FC = () => {
 }
 
   return (
-    <>
-      {isLoading ? <div>isLoading...</div> : 
       <div>
       <h1>
         Select the item that you want to generate a submenu for:
@@ -138,7 +111,7 @@ export const IntegrationApp: FC = () => {
         <div>
           <h4>previously checked boxes:</h4> 
           <ul>
-          {previouslyCheckedBoxes && previouslyCheckedBoxes.map(checkedBox => {
+          {elementValue && elementValue.map(checkedBox => {
             return (
               <li>
                 {checkedBox}
@@ -151,8 +124,6 @@ export const IntegrationApp: FC = () => {
         <h3>{elementValue}</h3>
       </section>
       </div>
-    }
-    </>
   
   );
 };
