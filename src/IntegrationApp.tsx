@@ -19,10 +19,11 @@ export const IntegrationApp: FC = () => {
     CustomElement.getElementValue(codename, v => typeof v === 'string' && setWatchedElementValue(v));
   }, []);
 
-  const showPreviouslySelectedValues = useCallback((codename:string) => {
-    getExistingChecked(codename)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  const showPreviouslySelectedValues = useCallback(async (codename:string) => {
+    const menu = await getExistingChecked(codename)
+    setPreviouslyCheckedBoxes(menu)
+    setIsLoading(false)
+  },[getExistingChecked]);
 
   useEffect(() => {
     CustomElement.init((element, context) => {
@@ -36,17 +37,11 @@ export const IntegrationApp: FC = () => {
       setElementValue(element.value ?? '');
       updateWatchedElementValue(element.config.textElementCodename);
       showPreviouslySelectedValues(context.item.codename);
-      // if(itemCodename){
-      //   getExistingChecked(itemCodename)
-      // }
-
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateWatchedElementValue, showPreviouslySelectedValues]);
 
-  function getExistingChecked(codename:string){
-    (async function getPreviouslyChecked(codename){
-      //API logic to get existing checked boxes
+  async function getExistingChecked(codename:string){
       //   //TODO: abstract delivery client setup for re-use
         if(projectId){
           const deliveryClient = createDeliveryClient({
@@ -54,15 +49,13 @@ export const IntegrationApp: FC = () => {
           });
 
           //TODO: make element codename dynamic - from config
-          await deliveryClient.item(codename)
+          const menu = await deliveryClient.item(codename)
           .elementsParameter(['custom_sub_menu'])
           .toPromise()
-          .then(res => {
-            setPreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
-            setIsLoading(false)
-          })
+          .then(res => (res.data.item.elements[0]?.value))
+
+          return menu
         }
-      })(codename); 
   }
 
   useEffect(() => {
