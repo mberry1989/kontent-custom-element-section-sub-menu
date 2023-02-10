@@ -11,7 +11,7 @@ export const IntegrationApp: FC = () => {
   const [selectedItemTypes, setSelectedItemTypes]  = useState<ReadonlyArray<string>>([]);
   const [checkboxes, setCheckboxes] = useState<Array<string>>()
   const [checkedBoxes, setCheckedBoxes] = useState<Array<string>>([])
-  const [previouslyCheckedBoxes, setpreviouslyCheckedBoxes] = useState<Array<string>>()
+  const [previouslyCheckedBoxes, setPreviouslyCheckedBoxes] = useState<Array<string>>()
   const [isLoading, setIsLoading] = useState<Boolean>(true)
   const [elementValue, setElementValue] = useState<string | null>(null);
 
@@ -30,41 +30,40 @@ export const IntegrationApp: FC = () => {
       setItemCodename(context.item.codename)
       setElementValue(element.value ?? '');
       updateWatchedElementValue(element.config.textElementCodename);
+      if(itemCodename){
+        getExistingChecked(itemCodename)
+      }
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateWatchedElementValue]);
 
   function getExistingChecked(codename:string){
     //API logic to get existing checked boxes
-    function getCheckboxes(codename:string){
-      //TODO: abstract delivery client setup for re-use
-      if(projectId){
-        const deliveryClient = createDeliveryClient({
-        projectId: projectId
-        });
+    setPreviouslyCheckedBoxes(['test', 'test2', 'test3'])
+    setIsLoading(false)
 
-        //TODO: make element codename dynamic - from config
-        deliveryClient.item(codename)
-        .elementsParameter(['custom_sub_menu'])
-        .toPromise()
-        .then(res => {
-          //setpreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
-          setpreviouslyCheckedBoxes(['test', 'test2', 'test3'])
-          setIsLoading(false)
-        });
-      }
-    };
+    // function getCheckboxes(codename:string){
+    //   //TODO: abstract delivery client setup for re-use
+    //   if(projectId){
+    //     const deliveryClient = createDeliveryClient({
+    //     projectId: projectId
+    //     });
+
+    //     //TODO: make element codename dynamic - from config
+    //     deliveryClient.item(codename)
+    //     .elementsParameter(['custom_sub_menu'])
+    //     .toPromise()
+    //     .then(res => {
+    //       //setpreviouslyCheckedBoxes(res.data.item.elements[0]?.value)
+    //       // setPreviouslyCheckedBoxes(['test', 'test2', 'test3'])
+    //       // setIsLoading(false)
+    //     });
+    //   }
+    // };
     
-    getCheckboxes(codename);
+    // getCheckboxes(codename);
 
   }
-
-  useEffect(() => {
-    if(itemCodename){
-      getExistingChecked(itemCodename)
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
   useEffect(() => {
     CustomElement.setHeight(500);
