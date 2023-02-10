@@ -33,12 +33,7 @@ export const IntegrationApp: FC = () => {
             .then(res => {
               return res.data.item
             })
-
-          console.log(menu.elements['custom_sub_menu']?.value)
-          return menu.elements['custom_sub_menu']?.value
-        }
-        else{
-          setPreviouslyCheckedBoxes(['test1', 'test2', 'test3'])
+          setPreviouslyCheckedBoxes(menu.elements['custom_sub_menu']?.value)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
