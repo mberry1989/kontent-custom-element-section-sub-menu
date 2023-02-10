@@ -23,7 +23,8 @@ export const IntegrationApp: FC = () => {
     const menu = await getExistingChecked(codename)
     setPreviouslyCheckedBoxes(menu)
     setIsLoading(false)
-  },[getExistingChecked]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
 
   useEffect(() => {
     CustomElement.init((element, context) => {
