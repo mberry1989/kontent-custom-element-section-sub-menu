@@ -136,22 +136,27 @@ export const IntegrationApp: FC = () => {
         <button onClick={selectItems}>Select different items</button>
       </h1>
       <section>
-        These are your selected item names: {selectedItemNames.join(', ')} -
-        - {selectedItemTypes.join(', ')} -
-        <ul>
-        {checkboxes && checkboxes.map(box => {
-          let checked:boolean = checkedBoxes.includes(box)
-          return (
-            <li>
-              <input type='checkbox' checked={checked} title={box} value={box} onChange={handleChecked}/>codename:{box}
-            </li>
-          )
-        })}
-        </ul>
-        <div>Current item codename: {itemCodename}</div>
-        <div>Checked Boxes: {checkedBoxes}</div>
-        <div>previously checked boxes: {previouslyCheckedBoxes}</div>
-
+        <h3>Selected Item for Sub Menu:</h3>
+          {selectedItemNames.join(', ')}
+          <div>
+            <ul>
+            {checkboxes && checkboxes.map(box => {
+              let checked:boolean = checkedBoxes.includes(box)
+              return (
+                <li>
+                  <input type='checkbox' checked={checked} title={box} value={box} onChange={handleChecked}/>codename: {box}
+                </li>
+              )
+            })}
+            </ul>
+        </div>
+        <div>
+          <h4>previously checked boxes:</h4> 
+          {previouslyCheckedBoxes.map(box => {
+            return <div>{box}</div>
+            })
+          }
+        </div>
       </section>
       </div>
     }
