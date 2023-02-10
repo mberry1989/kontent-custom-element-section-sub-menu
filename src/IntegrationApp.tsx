@@ -11,7 +11,7 @@ export const IntegrationApp: FC = () => {
   const [selectedItemTypes, setSelectedItemTypes]  = useState<ReadonlyArray<string>>([]);
   const [checkboxes, setCheckboxes] = useState<Array<string>>()
   const [checkedBoxes, setCheckedBoxes] = useState<Array<string>>([])
-  const [previouslyCheckedBoxes, setPreviouslyCheckedBoxes] = useState<Array<string>>()
+  const [previouslyCheckedBoxes, setPreviouslyCheckedBoxes] = useState<Array<string>>([])
   const [isLoading, setIsLoading] = useState<Boolean>(true)
   const [elementValue, setElementValue] = useState<string | null>(null);
 
