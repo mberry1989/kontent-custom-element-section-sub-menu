@@ -34,7 +34,7 @@ export const IntegrationApp: FC = () => {
               return res.data.item
             })
 
-          console.log(menu.elements[0]?.value)
+          console.log(menu.elements)
         }
         else{
           setPreviouslyCheckedBoxes(['test1', 'test2', 'test3'])
