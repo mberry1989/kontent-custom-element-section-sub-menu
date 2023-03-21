@@ -5,7 +5,7 @@ export const IntegrationApp: FC = () => {
   const [config, setConfig] = useState<Config | null>(null);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [itemName, setItemName] = useState<string | null>(null);
-  const [selectedItemNames, setSelectedItemNames] = useState<ReadonlyArray<string>>([]);
+  // const [selectedItemNames, setSelectedItemNames] = useState<ReadonlyArray<string>>([]);
   const [selectedItemTypes, setSelectedItemTypes]  = useState<ReadonlyArray<string>>([]);
   const [checkboxes, setCheckboxes] = useState<Array<string>>()
   const [checkedBoxes, setCheckedBoxes] = useState<Array<string>>([])
@@ -37,7 +37,7 @@ export const IntegrationApp: FC = () => {
       .then(ids => CustomElement.getItemDetails(ids?.map(i => i.id) ?? []))
       .then(items => 
         {
-          setSelectedItemNames(items?.map(item => item.name) ?? [])
+          // setSelectedItemNames(items?.map(item => item.name) ?? [])
           setSelectedItemTypes(items?.map(item => item.type.id) ?? [])
         }
         );
@@ -97,8 +97,6 @@ export const IntegrationApp: FC = () => {
       </h1>
       <section>
       <button onClick={selectItems}>Select different items</button>
-        <h3>Selected Item for Sub Menu:</h3>
-          {selectedItemNames.join(', ')} Content Item --
           <div>
               <ul>
               {checkboxes && checkboxes.map(box => {
@@ -112,7 +110,7 @@ export const IntegrationApp: FC = () => {
               </ul>
         </div>
         <div>
-          <h4>previously checked boxes:</h4> 
+          <h4>Selected Sub Navigtion Elements:</h4> 
           <ul>
           {elementValue && elementValue.map(checkedBox => {
             return (
